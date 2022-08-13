@@ -1,0 +1,99 @@
+from bs4 import BeautifulSoup
+import requests
+headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '3600',
+    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
+    }
+
+def Egypt():
+    url = 'https://www.egypttoday.com/Section/News/1'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('div', class_="BOrderBoxSection")
+
+    for i in tags:
+        printed = str(i.a)
+    print(url + printed.replace("<a href=", "").replace('"', '').replace("</a>","").replace(">","\n"))
+
+def China():
+    url = 'https://theguardian.com/world/china'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('div', class_="fc-item__container",)
+
+    for i in tags:
+        printed = str(i.h3)
+    print(printed.replace('<h3 class="fc-item__title"><a class="fc-item__link" data-link-name="article" href="', "").replace('"> <span class="u-faux-block-link__cta fc-item__headline"> <span class="js-headline-text"', '').replace(' </span></span> </a></h3>', '').replace('>', '\n').replace("</span",'').replace('</a','').replace('</h3',''))
+
+def Kenya():
+    url = 'https://www.standardmedia.co.ke/'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('div', class_='mb-4')
+    for i in tags:
+        printed = str(i.a)
+    print(printed.replace('<a href="','').replace('">','').replace('<h1>','').replace('</h1>','').replace('</a>',''))
+
+def Korea():
+    url = 'https://www.koreaherald.com/'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('div', class_="main_l_t1")
+    urlFind = soup.find_all('a', href=True)
+    for a in urlFind[73:74]:
+        urlFind= a['href']
+    for i in tags[:1]:
+        printed = str(i)
+    print(url + urlFind)
+    print(printed.replace('<div class="main_l_t1">', '').replace('</div>', ''))
+
+def Ecuador():
+    url = 'https://www.ecuadortimes.net/'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('div', class_="blog-content-wrapper")
+    for i in tags:
+        printed = str(i.h2)
+    print(printed.replace('<h2 class="blog-title"><a href="', '').replace('">', '\n').replace('</a></h2>',''))
+
+def Spain():
+    url = 'https://english.elpais.com/spain/'
+    req = requests.get(url, headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('h2', class_="c_t")
+    for i in tags:
+        printed = str(i)
+    print(url + printed.replace('<h2 class="c_t"><a href="', '').replace('</a></h2>','').replace('">','\n'))
+
+def India():
+    url = 'https://indianexpress.com/section/india/'
+    req = requests.get(url,headers)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    tags = soup.find_all('h2', class_='title')
+    for i in tags:
+        printed = str(i.a)
+    print(printed.replace('<a href="','').replace('">','\n').replace('</a>',''))
+
+
+print("Available countries: Egypt, China, Kenya, Korea, Ecuador, Spain, and India\n")
+ask = (input("What's going on in... ").lower())
+
+if ask == 'egypt':
+    Egypt()
+elif ask == 'china':
+    China()
+elif ask == 'kenya':
+    Kenya()
+elif ask == 'korea':
+    Korea()
+elif ask == 'ecuador':
+    Ecuador()
+elif ask == 'spain':
+    Spain()
+elif ask == 'india':
+    India()
+else:
+    print("Not a valid country! Try a country from the list above.")
